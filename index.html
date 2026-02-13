@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SN Pro", sans-serif;
+            font-size: bold;
+            overflow: hidden;
+            height: 100vh;
+            background: #000;
+        }
+
+        /* Начальный экран */
+        #initial-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #1a0a0a 100%);
+            transition: opacity 0.8s ease;
+        }
+
+        #initial-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .typewriter-text {
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            padding: 0 20px;
+            margin-bottom: 40px;
+            border-right: 3px solid #ff6b9d;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink-caret 0.75s step-end infinite;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff6b9d; }
+        }
+
+        .open-button {
+            opacity: 0;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 400;
+            color: #fff;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            animation: fadeInButton 0.5s ease forwards;
+            animation-delay: 3s;
+            letter-spacing: 0.5px;
+        }
+
+        .open-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.6);
+        }
+
+        @keyframes fadeInButton {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Экран с валентинкой */
+        #valentine-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 50%, #c2185b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        #valentine-screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Падающие сердечки */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            animation: fall linear infinite;
+            pointer-events: none;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px)) translateX(var(--drift)) rotate(var(--rotation));
+                opacity: 0;
+            }
+        }
+
+        /* Валентинка */
+        .valentine-card {
+            position: relative;
+            width: 320px;
+            min-height: 400px;
+            background: #fff;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: cardGlow 2s ease-in-out infinite, slideIn 0.8s ease;
+            z-index: 10;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes cardGlow {
+            0%, 100% {
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 25px 70px rgba(255, 107, 157, 0.5);
+            }
+        }
+
+        .big-heart {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.15);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .valentine-text {
+            font-size: 26px;
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translate3d(0, 0, 0);
+            will-change: auto;
+        }
+
+        .valentine-emoji {
+            font-size: 36px;
+            margin-top: 10px;
+        }
+
+        .decorative-hearts {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            font-size: 30px;
+            opacity: 0.3;
+        }
+
+        .decorative-hearts span {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .decorative-hearts span:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .decorative-hearts span:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Адаптация для маленьких экранов */
+        @media (max-width: 360px) {
+            .valentine-card {
+                width: 280px;
+                padding: 30px 20px;
+            }
+
+            .valentine-text {
+                font-size: 22px;
+            }
+
+            .typewriter-text {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Начальный экран -->
+    <div id="initial-screen">
+        <div class="typewriter-text" id="typewriter"></div>
+        <button class="open-button" id="openBtn">Открыть</button>
+    </div>
+
+    <!-- Экран с валентинкой -->
+    <div id="valentine-screen">
+        <div class="valentine-card">
+            <div class="decorative-hearts">
+                <span>💕</span>
+                <span>💖</span>
+                <span>💕</span>
+            </div>
+            <div class="big-heart">❤️</div>
+            <div class="valentine-text">
+                Не грусти <span class="valentine-emoji">:Р</span><br>
+                С наступающим<br>
+                14 февраля!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Эффект печатной машинки
+        const text = "У меня для тебя кое-что есть :)";
+        const typewriterElement = document.getElementById('typewriter');
+        let index = 0;
+
+        function typeWriter() {
+            if (index < text.length) {
+                typewriterElement.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+
+        // Запуск анимации печати при загрузке страницы
+        window.addEventListener('load', () => {
+            setTimeout(typeWriter, 500);
+        });
+
+        // Обработчик кнопки "Открыть"
+        document.getElementById('openBtn').addEventListener('click', () => {
+            document.getElementById('initial-screen').classList.add('hidden');
+            document.getElementById('valentine-screen').classList.add('active');
+            createFallingHearts();
+        });
+
+        // Создание падающих сердечек
+        function createFallingHearts() {
+            const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            const screen = document.getElementById('valentine-screen');
+            
+            function addHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                
+                // Случайная позиция по горизонтали
+                const startX = Math.random() * 100;
+                heart.style.left = startX + '%';
+                heart.style.top = '-100px'; // Начинаем выше экрана
+                
+                // Случайный размер
+                heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                
+                // Случайная длительность падения
+                const duration = Math.random() * 4 + 5;
+                heart.style.animationDuration = duration + 's';
+                
+                // Случайная задержка
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Случайный дрифт (отклонение по горизонтали)
+                const drift = (Math.random() - 0.5) * 100;
+                heart.style.setProperty('--drift', drift + 'px');
+                
+                // Случайное вращение
+                const rotation = Math.random() * 180 - 90;
+                heart.style.setProperty('--rotation', rotation + 'deg');
+                
+                screen.appendChild(heart);
+                
+                // Удаляем сердечко после анимации
+                setTimeout(() => {
+                    heart.remove();
+                }, (duration + 2) * 1000);
+            }
+            
+            // Создаем сердечки с интервалом
+            setInterval(addHeart, 400);
+            
+            // Создаем начальные сердечки
+            for (let i = 0; i < 20; i++) {
+                setTimeout(addHeart, i * 150);
+            }
+        }
+    </script>
+</body>
+</html>
